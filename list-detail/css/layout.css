@@ -1,0 +1,152 @@
+
+#app {
+	
+}
+
+#header {
+	position: relative;
+	z-index: 2;
+}
+
+#global_actions_trigger {
+	width: 0;
+	background: url(../shared/arrow_down.png) no-repeat right center;
+	cursor: pointer;
+	transition: width ease-out 0.3s;
+	-o-transition: width ease-out 0.3s;
+	-ms-transition: width ease-out 0.3s;
+	-moz-transition: width ease-out 0.3s;
+	-webkit-transition: width ease-out 0.3s;
+}
+
+#app > section {
+	position: relative;
+}
+
+#content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1;
+}
+
+#content > x-actionbar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 60px;
+	height: 100%;
+	transition: width ease-out 0.3s;
+	-o-transition: width ease-out 0.3s;
+	-ms-transition: width ease-out 0.3s;
+	-moz-transition: width ease-out 0.3s;
+	-webkit-transition: width ease-out 0.3s;
+}
+
+#content > x-actionbar > x-action {
+	overflow: hidden;
+}
+
+#content > x-shift {
+	width: auto;
+}
+
+#content > x-shift > x-slidebox {
+	height: 100%;
+}
+
+#list {
+	overflow: auto;
+}
+
+#detail {
+	overflow: auto;
+}
+
+/*** Desktop ***/
+
+	@media only screen and (max-width: 520px){
+		
+		#global_actions_trigger {
+			width: 22px;
+		}
+		
+		#views {
+			width: 100% !important;
+			transform: translateX(0%) !important;
+		}
+	
+		#list {
+			width: 38% !important;
+		}
+
+		#detail {
+			width: 62% !important;
+		}
+	}
+	
+	@media only screen and (min-width: 520px) and (max-width: 920px) {
+		
+		#views {
+			width: 100% !important;
+			transform: translateX(0%) !important;
+		}
+		
+		#list {
+			width: 38% !important;
+		}
+
+		#detail {
+			width: 62% !important;
+		}
+	}
+	
+	@media only screen and (min-width: 920px) {
+		#content > x-actionbar {
+			width: 120px;
+		}
+	
+		#content > x-actionbar > x-action img {
+			width: 24px;
+		}
+		
+		#views {
+			width: 100% !important;
+			transform: translateX(0%) !important;
+		}
+		
+		#list {
+			width: 28% !important;
+		}
+
+		#detail {
+			width: 72% !important;
+		}
+	}
+	
+/*** Tablet ***/
+
+	@media only screen and (min-device-width: 801px) and (max-device-width : 1200px) {
+		#content > x-shift {
+			left: 60px !important;
+		}
+	}
+
+
+/*** Phone ***/
+	
+	/* portrait */
+	@media only screen and (max-device-width : 480px) and (orientation: portrait) {
+		#global_actions_trigger {
+			width: 22px;
+		}
+	}
+	
+	/* landscape */
+	@media only screen and (min-device-width : 481px) and (max-device-width : 800px) and (orientation: landscape) {
+		#global_actions_trigger {
+			width: 22px;
+		}
+	}

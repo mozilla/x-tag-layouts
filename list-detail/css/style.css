@@ -1,0 +1,114 @@
+
+#header {
+	background: linear-gradient(top, #c66a00, #b54d17);
+	background: -o-linear-gradient(top, #c66a00, #b54d17);
+	background: -ms-linear-gradient(top, #c66a00, #b54d17);
+	background: -moz-linear-gradient(top, #c66a00, #b54d17);
+	background: -webkit-linear-gradient(top, #c66a00, #b54d17);
+	border-bottom: 1px solid #933212;
+    box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.7);
+	-o-box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.7);
+	-ms-box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.7);
+	-webkit-box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.7);
+	-moz-box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.7);
+}
+
+#header > x-actionbar {
+	color: #fff;
+	box-pack: end;
+	-o-box-pack: end;
+	-ms-box-pack: end;
+	-moz-box-pack: end;
+	-webkit-box-pack: end;
+}
+
+#header > x-actionbar > x-action {
+	padding: 0 8px;
+	border-right: 1px solid rgba(0,0,0, 0.25);
+	border-left: 1px solid rgba(255,255,255, 0.25);
+}
+
+#header > x-actionbar > x-action:first-child {
+	border-left: none;
+}
+
+#header > x-actionbar > x-action:last-child {
+	border-right: none;
+}
+
+#header > x-actionbar img {
+	width: 24px;
+}
+
+#logo > img  {
+	margin: 3px 2px 2px 4px;
+}
+
+#wordmark  {
+	font-weight: bold;
+	color: #fff;
+	text-shadow: 0 -1px 0 #933212;
+}
+
+#content {
+	background: url(../shared/checkered-bk.png);
+}
+
+#global_menu {
+	color: #fff;
+	box-orient: vertical;
+	-o-box-orient: vertical;
+	-ms-box-orient: vertical;
+	-moz-box-orient: vertical;
+	-webkit-box-orient: vertical;
+	flex-direction: column;
+	-o-flex-direction: column;
+	-ms-flex-direction: column;
+	-moz-flex-direction: column;
+	-webkit-flex-direction: column;
+}
+
+	#global_menu > x-action {
+		padding: 8px 10px;
+		opacity: 0.6;
+		cursor: pointer;
+		outline: none;
+	}
+	
+	#global_menu > x-action[selected] {
+		opacity: 1;
+		cursor: default;
+		background: rgba(0, 0, 0, 0.3);
+		box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.7) inset, 0 2px 2px -3px rgba(255, 255, 255, 0.5);
+	}
+
+#content > x-shift {
+	box-shadow: -1px 0 6px -3px;
+	background: #fff;
+}
+
+#content > x-shift > x-slidebox {
+	border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#views > x-slide {
+	border-left: 1px solid rgba(0,0,0, 0.4);
+}
+
+#views > x-slide:first-child {
+	border-left: none;
+}
+
+#list {
+	border: none;
+}
+
+#list ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+#list h4 {
+	margin-bottom: 2px;
+}

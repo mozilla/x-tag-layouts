@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+	<title>Two Column Layout</title>
+	<link rel="stylesheet" type="text/css" href="../shared/general.css" />
+	<link rel="stylesheet" type="text/css" href="layout.css" />
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="stylesheet" type="text/css" href="../../slidebox/slidebox.css" />
+	<link rel="stylesheet" type="text/css" href="../../shiftbox/shiftbox.css" />
+	<link rel="stylesheet" type="text/css" href="../../actionbar/actionbar.css" />
+	<script type="text/javascript" src="../../lib/x-tag/x-tag.js"></script>
+	<script type="text/javascript" src="../../slidebox/slidebox.js"></script>
+	<script type="text/javascript" src="../../shiftbox/shiftbox.js"></script>
+	<script type="text/javascript" src="../../actionbar/actionbar.js"></script>
+	
+</head>
+
+<body>
+	<div id="app" class="flex-stack">
+
+	<header id="header" class="flex-line flex-zero">
+		<div id="global_actions_trigger" class="flex-zero"></div>
+		<div id="logo" class="flex-line flex-zero">
+			<img src="../shared/logo.png"/>
+		</div>
+		<div id="wordmark" class="flex-line flex-center">
+			<span>Basic App</span>
+		</div>
+		<x-actionbar id="global_actions" data-mode="full">
+			<x-action label="My Todos" icon="../shared/eye.png" selected></x-action>
+			<x-action label="New Todo" icon="../shared/pencil.png"></x-action>
+			<x-action label="Settings" icon="../shared/equalizer.png"></x-action>
+		</x-actionbar>
+	</header>
+	
+	<section>	
+		<x-shiftbox id="content">
+		
+			<x-actionbar id="global_menu">
+				<x-action label="One" icon="../shared/pencil.png" selected></x-action>
+				<x-action label="Two" icon="../shared/pencil.png"></x-action>
+				<x-action label="Three" icon="../shared/pencil.png"></x-action>
+			</x-actionbar>
+			
+			<x-shift>
+				<x-slidebox>
+					<x-slides id="views">
+					
+						<x-slide id="list" selected>
+							<ul>
+								<li>
+									<h4>Super cool item 1</h4>
+									<span>Sent: 12:34pm</span>
+								</li>
+								<li>
+									<h4>Super cool item 2</h4>
+									<span>Sent: 12:02pm</span>
+								</li>
+								<li>
+									<h4>Super cool item 3</h4>
+									<span>Sent: 11:46pm</span>
+								</li>
+							</ul>
+						</x-slide>
+						
+						<x-slide id="detail">
+							<h2>Foo Detail Section</h2>
+							<p>All the railway lines north of the Thames and the South-Eastern people at Cannon Street had been warned by midnight on Sunday, and trains were being filled. 
+							People were fighting savagely for standing-room in the carriages even at two o'clock.  By three, people were being trampled and crushed even in Bishopsgate 
+							Street, a couple of hundred yards or more from Liverpool Street station; revolvers were fired, people stabbed, and the policemen who had been sent to direct 
+							the traffic, exhausted and infuriated, were breaking the heads of the people they were called out to protect. And as the day advanced and the engine drivers 
+							and stokers refused to return to London, the pressure of the flight drove the people in an ever-thickening multitude away from the stations and along the 
+							northward-running roads.  By midday a Martian had been seen at Barnes, and a cloud of slowly sinking black vapour drove along the Thames and across the flats 
+							of Lambeth, cutting off all escape over the bridges in its sluggish advance.  Another bank drove over Ealing, and surrounded a little island of survivors on 
+							Castle Hill, alive, but unable to escape.  So he got out of the fury of the panic, and, skirting the Edgware Road, reached Edgware about seven, fasting and 
+							wearied, but well ahead of the crowd.  Along the road people were standing in the roadway, curious, wondering.  He was passed by a number of</p>
+							
+							<p>All the railway lines north of the Thames and the South-Eastern people at Cannon Street had been warned by midnight on Sunday, and trains were being filled. 
+							People were fighting savagely for standing-room in the carriages even at two o'clock.  By three, people were being trampled and crushed even in Bishopsgate 
+							Street, a couple of hundred yards or more from Liverpool Street station; revolvers were fired, people stabbed, and the policemen who had been sent to direct 
+							the traffic, exhausted and infuriated, were breaking the heads of the people they were called out to protect. And as the day advanced and the engine drivers 
+							and stokers refused to return to London, the pressure of the flight drove the people in an ever-thickening multitude away from the stations and along the 
+							northward-running roads.  By midday a Martian had been seen at Barnes, and a cloud of slowly sinking black vapour drove along the Thames and across the flats 
+							of Lambeth, cutting off all escape over the bridges in its sluggish advance.  Another bank drove over Ealing, and surrounded a little island of survivors on 
+							Castle Hill, alive, but unable to escape.  So he got out of the fury of the panic, and, skirting the Edgware Road, reached Edgware about seven, fasting and 
+							wearied, but well ahead of the crowd.  Along the road people were standing in the roadway, curious, wondering.  He was passed by a number of</p>
+							
+							<p>All the railway lines north of the Thames and the South-Eastern people at Cannon Street had been warned by midnight on Sunday, and trains were being filled. 
+							People were fighting savagely for standing-room in the carriages even at two o'clock.  By three, people were being trampled and crushed even in Bishopsgate 
+							Street, a couple of hundred yards or more from Liverpool Street station; revolvers were fired, people stabbed, and the policemen who had been sent to direct 
+							the traffic, exhausted and infuriated, were breaking the heads of the people they were called out to protect. And as the day advanced and the engine drivers 
+							and stokers refused to return to London, the pressure of the flight drove the people in an ever-thickening multitude away from the stations and along the 
+							northward-running roads.  By midday a Martian had been seen at Barnes, and a cloud of slowly sinking black vapour drove along the Thames and across the flats 
+							of Lambeth, cutting off all escape over the bridges in its sluggish advance.  Another bank drove over Ealing, and surrounded a little island of survivors on 
+							Castle Hill, alive, but unable to escape.  So he got out of the fury of the panic, and, skirting the Edgware Road, reached Edgware about seven, fasting and 
+							wearied, but well ahead of the crowd.  Along the road people were standing in the roadway, curious, wondering.  He was passed by a number of</p>
+						
+							<p>All the railway lines north of the Thames and the South-Eastern people at Cannon Street had been warned by midnight on Sunday, and trains were being filled. 
+							People were fighting savagely for standing-room in the carriages even at two o'clock.  By three, people were being trampled and crushed even in Bishopsgate 
+							Street, a couple of hundred yards or more from Liverpool Street station; revolvers were fired, people stabbed, and the policemen who had been sent to direct 
+							the traffic, exhausted and infuriated, were breaking the heads of the people they were called out to protect. And as the day advanced and the engine drivers 
+							and stokers refused to return to London, the pressure of the flight drove the people in an ever-thickening multitude away from the stations and along the 
+							northward-running roads.  By midday a Martian had been seen at Barnes, and a cloud of slowly sinking black vapour drove along the Thames and across the flats 
+							of Lambeth, cutting off all escape over the bridges in its sluggish advance.  Another bank drove over Ealing, and surrounded a little island of survivors on 
+							Castle Hill, alive, but unable to escape.  So he got out of the fury of the panic, and, skirting the Edgware Road, reached Edgware about seven, fasting and 
+							wearied, but well ahead of the crowd.  Along the road people were standing in the roadway, curious, wondering.  He was passed by a number of</p>
+						</x-slide>
+						
+					</x-slides>
+				</x-slidebox>
+			
+			</x-shift>
+			
+		</x-shiftbox>
+	</section>
+	
+	
+	<footer id="footer" class="flex-line flex-zero">
+		
+	</footer>
+	
+	</div>
+</body>
+
+<script type="text/javascript">
+	
+(function(){
+
+	var attachMediaListener = function(query, fn){
+			fn.mediaListener = window.matchMedia(query);
+			fn.mediaListener.addListener(function(mql){
+				fn(mql);
+			});
+		},
+		mediaMatchListeners = {
+		
+		// Small Desktop
+		'only screen and (max-width: 520px)': function(mql){
+			if (mql.matches) {
+				document.getElementById('content').shift = 0;
+				document.getElementById('global_actions').setAttribute('data-mode', 'icon');
+			}
+			else {
+				
+			}
+		},
+		
+		// Medium Desktop
+		'only screen and (min-width: 520px) and (max-width: 920px)': function(mql){
+			if (mql.matches) {
+				document.getElementById('content').shift = 60;
+				document.getElementById('global_actions').setAttribute('data-mode', 'full');
+			}
+			else {
+				
+			}
+		},
+		
+		// Large Desktop
+		'only screen and (min-width: 921px)': function(mql){
+			if (mql.matches) {
+				document.getElementById('content').shift = 120;
+				document.getElementById('global_actions').setAttribute('data-mode', 'full');
+				document.querySelector('#content > x-actionbar').setAttribute('data-mode', 'full');
+			}
+			else {
+				document.querySelector('#content > x-actionbar').removeAttribute('data-mode');
+			}
+		},
+		
+		// Tablet
+		'only screen and (min-device-width: 801px) and (max-device-width : 1200px)': function(mql){
+			if (mql.matches) {
+				alert('Tablet ' + mql.matches);
+				document.getElementById('content').shift = 60;
+				document.getElementById('global_actions').setAttribute('data-mode', 'full');
+			}
+			else {
+				
+			}
+		},
+		
+		// Phone in Portrait
+		'only screen and (max-device-width : 480px) and (orientation: portrait)': function(mql){
+			if (mql.matches) {
+				document.getElementById('content').shift = 0;
+				document.getElementById('global_actions').setAttribute('data-mode', 'icon');
+			}
+			else {
+				
+			}
+		},
+		
+		// Phone in Landscape
+		'only screen and (min-device-width : 481px) and (max-device-width : 800px) and (orientation: landscape) ': function(mql){
+			if (mql.matches) {
+				document.getElementById('content').shift = 0;
+				document.getElementById('global_actions').setAttribute('data-mode', 'icon');
+			}
+			else {
+				
+			}
+		}
+	};
+	
+	document.addEventListener('DOMContentLoaded', function(){
+		for (var z in mediaMatchListeners){
+			var list = window.matchMedia(z);
+			mediaMatchListeners[z](list);
+			attachMediaListener(z, mediaMatchListeners[z]);
+		}
+	});
+	
+	xtag.addEvent(document.getElementById('global_actions_trigger'), 'click:touch', function(){
+		var content = document.getElementById('content');
+		content.shift = (content.shift == false) ? 60 : 0; 
+	});
+
+})();
+	
+</script>
+	
+</html>
