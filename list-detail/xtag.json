@@ -1,0 +1,9 @@
+{
+	"name": "List-Detail Layout", 
+	"x-tag": "0.5.4",
+	"dependencies":[
+		"mozilla/x-tag-elements/slidebox",
+		"mozilla/x-tag-elements/shiftbox",
+		"mozilla/x-tag-elements/actionbar"
+	] 
+}

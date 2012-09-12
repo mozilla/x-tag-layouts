@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8" />
+		
+		<title>X-Tag - a cross-browser web components library</title>
+		
+		
+		<link rel="stylesheet" type="text/css" href="actionbar.css"/>		
+		
+		<script type="text/javascript" src="../lib/x-tag/x-tag.js"></script>		
+		<script type="text/javascript" src="actionbar.js"></script>		
+		<style type="text/css">
+			#actionbar_demo {
+				height: 300px;
+				width: 220px;
+			}
+		</style>
+	</head>
+
+<body>
+
+<div id="tags" class="max-width">
+
+	<dl>
+		
+		<dt>Actionbar</dt>
+		<dd id="flipbox">
+		
+			<p class="description">
+				The actionbar is a toolbar-type element that is switchable between three common button display modes (text, icon, both). The action bar also emits events via the command attribute.
+			</p>
+			<nav class="actions">
+					
+			</nav>
+			
+			<x-actionbar id="actionbar_demo">
+				<x-action label="One" icon="http://cdn1.iconfinder.com/data/icons/iconsweets/50/pen.png"></x-action>
+				<x-action label="Two" icon="http://cdn1.iconfinder.com/data/icons/iconsweets/50/pen.png"></x-action>
+				<x-action label="Three" icon="http://cdn1.iconfinder.com/data/icons/iconsweets/50/pen.png"></x-action>
+			</x-actionbar>
+			
+		</dd>
+	</dl>
+</div>
+	
+
+</body>
+
+<script type="text/javascript">
+
+	
+	document.addEventListener('click', function(e){
+		
+		var action = e.target,
+			parent = action.parentNode,
+			actionType = action.getAttribute('data-action-type');
+	
+		if (actionType) {
+		
+			var tag = action.parentElement.parentElement.id,
+				demo = document.getElementById(tag + '_demo');
+
+			switch(actionType) {
+				
+				case 'toggleFlip':
+					demo.flipped = !demo.flipped;
+					break;
+
+				case 'toggleDirection':
+					var directions = ['right','left','up','down'];
+					var idx = directions.indexOf(demo.flipDirection)+1;
+					idx = idx >= 4 ? 0 : idx;
+					action.innerHTML = action.innerHTML.replace(/\((\w+)\)/, function(){
+						return '(' + directions[idx] + ')';
+					});
+					demo.flipDirection = directions[idx];
+					break;
+
+			}
+			
+		}
+	});
+</script>
+
+</html>
