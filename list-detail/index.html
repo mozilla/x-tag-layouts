@@ -17,9 +17,13 @@
 	<script type="text/javascript" src="elements/mediaquery/mediaquery.js"></script>
 	<script type="text/javascript" src="elements/shiftbox/shiftbox.js"></script>
 	<script type="text/javascript" src="elements/slidebox/slidebox.js"></script>
+
+	<script type="text/javascript" src="js/todo.js"></script>
 </head>
 
 <body>
+	<x-indexdb for="x-todo-item" path="todoapp.todo-item" />
+
 	<div id="app" class="flex-stack">
 
 	<header id="header" class="flex-line flex-zero">
@@ -41,9 +45,9 @@
 		<x-shiftbox id="content">
 		
 			<x-actionbar id="global_menu">
-				<x-action label="One" icon="images/pencil.png" selected></x-action>
-				<x-action label="Two" icon="images/pencil.png"></x-action>
-				<x-action label="Three" icon="images/pencil.png"></x-action>
+				<x-action label="All" icon="images/pencil.png" selected></x-action>
+				<x-action label="Stared" icon="images/pencil.png"></x-action>
+				<x-action label="Done" icon="images/pencil.png"></x-action>
 			</x-actionbar>
 			
 			<x-shift>
@@ -51,14 +55,12 @@
 					<x-slides id="views">
 					
 						<x-slide id="list" selected>
-							<ul>
+							<ul id="todo-list">
 								<li>
-									<h4>Super cool item 1</h4>
-									<span>Sent: 12:34pm</span>
+									<x-todo-item></x-todo-item>
 								</li>
 								<li>
-									<h4>Super cool item 2</h4>
-									<span>Sent: 12:02pm</span>
+									<x-todo-item data-pk="2"></x-todo-item>
 								</li>
 								<li>
 									<h4>Super cool item 3</h4>
