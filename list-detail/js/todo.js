@@ -17,9 +17,9 @@ xtag.mixins.databind = {
 	},
 	methods: {
 		setData: function(data){
-			_populateData(data);
+			this._populateData(data);
 			this.xtag.entityData = data;
-			this.setAttribute('data-hasdata') = true;
+			this.setAttribute('data-hasdata', true);
 			xtag.fireEvent(this, 'dataavailable', { bubbles: false });
 		}, 
 		_populateData: function(data){
@@ -69,20 +69,25 @@ var templates = {
 	edit: '<input class="x-todo-item-title" type="text" value="${title}"/><input class="x-todo-item-title" type="text" value="${description}"/>'
 }
 
+function initTemplate(template){
+	template = template.replace('${title}', this.title)
+			.replace('${description}', this.description);
+
+	this.innerHTML = template;
+	this.xtag.title = xtag.query(this, 'x-todo-item-title');
+	this.xtag.description = xtag.query(this, 'x-todo-item-description');
+}
+
+
 xtag.register('x-todo-item', {
+	mixins: [ 'databind' ],
 	onCreate: function(){		
 		this.setAttribute('data-hasdata', false);
 	},
 	onInsert: function(){
 		var template = templates[this.getAttribute('data-template')] || templates['list'];
-		template.replace('${title}', this.title)
-			.replace('${description}', this.description);
-
-		this.innerHtml = template;
-		this.xtag.title = xtag.query(this, 'x-todo-item-title');
-		this.xtag.description = xtag.query(this, 'x-todo-item-description');
+		initTemplate.call(this, template);
 	},
-	mixins: [ 'databind' ],
 	events:{
 		'dataavailable': function(e, elem){
 			//populate item from elem.xtag.data
@@ -103,9 +108,6 @@ xtag.register('x-todo-item', {
 		}, 
 		'completed:databind()': function(){
 			
-		}, 
-		'template': function(){
-
 		}
 	},
 	getters: {
@@ -129,13 +131,19 @@ xtag.register('x-todo-item', {
 		}
 	}, 
 	methods: {
-
+		morph: function(template_name){
+			var template = templates[template_name];
+			if (template){
+				this.setAttribute('data-template', template_name);
+				initTemplate.call(this, template);
+			}
+		}
 	}
 });
 
 
-function locateProvider = function(target, fn){
-	xtag.query(document, 'x-indexdb').forEach(function(db)){
+function locateProvider(target, fn){
+	xtag.query(document, 'x-indexdb').forEach(function(db){
 			var match =	(target.matchesSelector || 
 				target.mozMatchesSelector ||
 				target.webkitMatchesSelector).call(target, db.getAttribute('for'));
@@ -153,9 +161,9 @@ document.addEventListener('datapropertychanged', function(e){
 document.addEventListener('dataentitycreated', function(e){
 	console.log("dataentitycreated", e.target.getAttribute('data-pk'));
 	locateProvider(e.target, function(db){
-		if (e.target.getAttribute('data-hasdata') == 'false') && e.target.pk){
+		if (e.target.getAttribute('data-hasdata') == 'false' && e.target.pk){
 			db.getById(e.target.pk, function(err, data){
-				
+
 			});
 		}
 	});
@@ -217,26 +225,3 @@ xtag.register('x-indexdb', {
 	}
 });
 
-
-
-/*
-	changes the event target
-*/
-xtag.pseudos.target = {
-	onAdd: function(pseudo, fn){
-		console.log("applying target pseudo", pseudo, fn);
-		var type = pseudo.key.split(':')[0];
-		this.removeEventListener(type, fn);
-		function attachEvent(element, type, fn){
-			var wrapped = xtag.applyPseudos(element, type, fn);
-			element.addEventListener(type, wrapped, 
-				!!~['focus', 'blur'].indexOf(type));
-		}
-		if (pseudo.value == 'document') attachEvent(document, type, fn);
-		else {
-			xtag.query(document, pseudo.value).forEach(function(element){
-				attachEvent(element, type, fn);
-			});
-		}
-	}
-}
