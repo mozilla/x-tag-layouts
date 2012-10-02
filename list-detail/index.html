@@ -11,18 +11,53 @@
 	<link rel="stylesheet" type="text/css" href="elements/actionbar/actionbar.css" />
 	<link rel="stylesheet" type="text/css" href="elements/shiftbox/shiftbox.css" />
 	<link rel="stylesheet" type="text/css" href="elements/slidebox/slidebox.css" />
+	<link rel="stylesheet" type="text/css" href="elements/flipbox/flipbox.css" />
 	<script type="text/javascript" src="js/x-tag.js"></script>
 	<script type="text/javascript" src="js/list-view.js"></script>
-	<script type="text/javascript" src="elements/actionbar/actionbar.js"></script>
+	<script type="text/javascript" src="elements/actionbar/actionbar.js"></script>	
 	<script type="text/javascript" src="elements/mediaquery/mediaquery.js"></script>
 	<script type="text/javascript" src="elements/shiftbox/shiftbox.js"></script>
 	<script type="text/javascript" src="elements/slidebox/slidebox.js"></script>
+	<script type="text/javascript" src="elements/flipbox/flipbox.js"></script>
+
 
 	<script type="text/javascript" src="js/todo.js"></script>
+
+	<style type="text/css">
+		x-template{
+			display: none;
+		}
+	</style>
+	<x-template id="x-todo-item-list">
+		<p class="x-todo-item-title">${title}</p>
+	</x-template>
+	<x-template id="x-todo-item-detail">
+		<p class="x-todo-item-title">${title}</p
+		<p class="x-todo-item-description">${description}</p>
+	</x-template>
+	<x-template id="x-todo-item-edit">
+		<p>
+			<label for="todo-title">Title</label>
+			<input id="todo-title" class="x-todo-item-title" type="text" value="${title}"/>
+		</p>
+		<p>
+			<label for="todo-description">Description</label>
+			<textarea id="todo-description" class="x-todo-item-title">${description}</textarea>
+		</p>
+		<button class="x-todo-item-create-button">Create</button>
+	</x-template>
 </head>
 
 <body>
-	<x-indexdb for="x-todo-item" path="todoapp.todo-item" />
+
+	<x-localstorage id="todoItems" for="x-todo-item" path="todoapp/todoItem">
+		<x-property key="title"></x-property>
+		<x-property key="description"></x-property>
+		<x-property key="date"></x-property>
+		<x-property key="starred"></x-property>
+		<x-property key="completed"></x-property>
+	</x-localstorage>
+	
 
 	<div id="app" class="flex-stack">
 
@@ -34,10 +69,9 @@
 		<div id="wordmark" class="flex-line flex-center">
 			<span>Basic App</span>
 		</div>
-		<x-actionbar id="global_actions" data-mode="full">
-			<x-action label="My Todos" icon="images/eye.png" selected></x-action>
-			<x-action label="New Todo" icon="images/pencil.png"></x-action>
-			<x-action label="Settings" icon="images/equalizer.png"></x-action>
+		<x-actionbar id="global_actions" data-mode="full">			
+			<x-action label="New Todo" data-action='new' icon="images/pencil.png"></x-action>
+			<x-action label="Settings" data-action='settings' icon="images/equalizer.png"></x-action>
 		</x-actionbar>
 	</header>
 	
@@ -45,55 +79,60 @@
 		<x-shiftbox id="content">
 		
 			<x-actionbar id="global_menu">
-				<x-action label="All" icon="images/pencil.png" selected></x-action>
-				<x-action label="Stared" icon="images/pencil.png"></x-action>
-				<x-action label="Done" icon="images/pencil.png"></x-action>
+				<x-action label="All" data-action='active' icon="images/pencil.png" selected></x-action>
+				<x-action label="Starred" data-action='starred' icon="images/pencil.png"></x-action>
+				<x-action label="Done" data-action='completed' icon="images/pencil.png"></x-action>
 			</x-actionbar>
 			
 			<x-shift>
 				<x-slidebox>
 					<x-slides id="views">
 					
-						<x-slide id="list" selected>
-							<ul id="todo-list">
-								<li>
-									<h4>Super cool item 3</h4>
-									<span>Sent: 11:46pm</span>
-								</li>
-							</ul>
+						<x-slide id="list" selected>							
+							<x-todo-list for="todoItems" query="{ 'completed': false }"></x-todo-list>
 						</x-slide>
 						
-						<x-slide id="detail">
-							<h2>Foo Detail Section</h2>
-							<p>All the railway lines north of the Thames and the South-Eastern people at Cannon Street had been warned by midnight on Sunday, and trains were being filled. 
-							People were fighting savagely for standing-room in the carriages even at two o'clock.  By three, people were being trampled and crushed even in Bishopsgate 
-							Street, a couple of hundred yards or more from Liverpool Street station; revolvers were fired, people stabbed, and the policemen who had been sent to direct 
-							the traffic, exhausted and infuriated, were breaking the heads of the people they were called out to protect. And as the day advanced and the engine drivers 
-							and stokers refused to return to London, the pressure of the flight drove the people in an ever-thickening multitude away from the stations and along the 
-							northward-running roads.  By midday a Martian had been seen at Barnes, and a cloud of slowly sinking black vapour drove along the Thames and across the flats 
-							of Lambeth, cutting off all escape over the bridges in its sluggish advance.  Another bank drove over Ealing, and surrounded a little island of survivors on 
-							Castle Hill, alive, but unable to escape.  So he got out of the fury of the panic, and, skirting the Edgware Road, reached Edgware about seven, fasting and 
-							wearied, but well ahead of the crowd.  Along the road people were standing in the roadway, curious, wondering.  He was passed by a number of</p>
+						<x-slide>
+							<x-flipbox id="flipbox">
+								<x-card>
+									<div id="detail">
+										<h2>Foo Detail Section</h2>
+										<p>All the railway lines north of the Thames and the South-Eastern people at Cannon Street had been warned by midnight on Sunday, and trains were being filled. 
+										People were fighting savagely for standing-room in the carriages even at two o'clock.  By three, people were being trampled and crushed even in Bishopsgate 
+										Street, a couple of hundred yards or more from Liverpool Street station; revolvers were fired, people stabbed, and the policemen who had been sent to direct 
+										the traffic, exhausted and infuriated, were breaking the heads of the people they were called out to protect. And as the day advanced and the engine drivers 
+										and stokers refused to return to London, the pressure of the flight drove the people in an ever-thickening multitude away from the stations and along the 
+										northward-running roads.  By midday a Martian had been seen at Barnes, and a cloud of slowly sinking black vapour drove along the Thames and across the flats 
+										of Lambeth, cutting off all escape over the bridges in its sluggish advance.  Another bank drove over Ealing, and surrounded a little island of survivors on 
+										Castle Hill, alive, but unable to escape.  So he got out of the fury of the panic, and, skirting the Edgware Road, reached Edgware about seven, fasting and 
+										wearied, but well ahead of the crowd.  Along the road people were standing in the roadway, curious, wondering.  He was passed by a number of</p>
+										
+										<p>All the railway lines north of the Thames and the South-Eastern people at Cannon Street had been warned by midnight on Sunday, and trains were being filled. 
+										People were fighting savagely for standing-room in the carriages even at two o'clock.  By three, people were being trampled and crushed even in Bishopsgate 
+										Street, a couple of hundred yards or more from Liverpool Street station; revolvers were fired, people stabbed, and the policemen who had been sent to direct 
+										the traffic, exhausted and infuriated, were breaking the heads of the people they were called out to protect. And as the day advanced and the engine drivers 
+										and stokers refused to return to London, the pressure of the flight drove the people in an ever-thickening multitude away from the stations and along the 
+										northward-running roads.  By midday a Martian had been seen at Barnes, and a cloud of slowly sinking black vapour drove along the Thames and across the flats 
+										of Lambeth, cutting off all escape over the bridges in its sluggish advance.  Another bank drove over Ealing, and surrounded a little island of survivors on 
+										Castle Hill, alive, but unable to escape.  So he got out of the fury of the panic, and, skirting the Edgware Road, reached Edgware about seven, fasting and 
+										wearied, but well ahead of the crowd.  Along the road people were standing in the roadway, curious, wondering.  He was passed by a number of</p>
+										
+										<p>All the railway lines north of the Thames and the South-Eastern people at Cannon Street had been warned by midnight on Sunday, and trains were being filled. 
+										People were fighting savagely for standing-room in the carriages even at two o'clock.  By three, people were being trampled and crushed even in Bishopsgate 
+										Street, a couple of hundred yards or more from Liverpool Street station; revolvers were fired, people stabbed, and the policemen who had been sent to direct 
+										the traffic, exhausted and infuriated, were breaking the heads of the people they were called out to protect. And as the day advanced and the engine drivers 
+										and stokers refused to return to London, the pressure of the flight drove the people in an ever-thickening multitude away from the stations and along the 
+										northward-running roads.  By midday a Martian had been seen at Barnes, and a cloud of slowly sinking black vapour drove along the Thames and across the flats 
+										of Lambeth, cutting off all escape over the bridges in its sluggish advance.  Another bank drove over Ealing, and surrounded a little island of survivors on 
+										Castle Hill, alive, but unable to escape.  So he got out of the fury of the panic, and, skirting the Edgware Road, reached Edgware about seven, fasting and 
+										wearied, but well ahead of the crowd.  Along the road people were standing in the roadway, curious, wondering.  He was passed by a number of</p>
+									</div>
+									<div id="settings">
+										<h2>Settings</h2>
+									</div>
+								</x-card>
+							</x-flipbox>
 							
-							<p>All the railway lines north of the Thames and the South-Eastern people at Cannon Street had been warned by midnight on Sunday, and trains were being filled. 
-							People were fighting savagely for standing-room in the carriages even at two o'clock.  By three, people were being trampled and crushed even in Bishopsgate 
-							Street, a couple of hundred yards or more from Liverpool Street station; revolvers were fired, people stabbed, and the policemen who had been sent to direct 
-							the traffic, exhausted and infuriated, were breaking the heads of the people they were called out to protect. And as the day advanced and the engine drivers 
-							and stokers refused to return to London, the pressure of the flight drove the people in an ever-thickening multitude away from the stations and along the 
-							northward-running roads.  By midday a Martian had been seen at Barnes, and a cloud of slowly sinking black vapour drove along the Thames and across the flats 
-							of Lambeth, cutting off all escape over the bridges in its sluggish advance.  Another bank drove over Ealing, and surrounded a little island of survivors on 
-							Castle Hill, alive, but unable to escape.  So he got out of the fury of the panic, and, skirting the Edgware Road, reached Edgware about seven, fasting and 
-							wearied, but well ahead of the crowd.  Along the road people were standing in the roadway, curious, wondering.  He was passed by a number of</p>
-							
-							<p>All the railway lines north of the Thames and the South-Eastern people at Cannon Street had been warned by midnight on Sunday, and trains were being filled. 
-							People were fighting savagely for standing-room in the carriages even at two o'clock.  By three, people were being trampled and crushed even in Bishopsgate 
-							Street, a couple of hundred yards or more from Liverpool Street station; revolvers were fired, people stabbed, and the policemen who had been sent to direct 
-							the traffic, exhausted and infuriated, were breaking the heads of the people they were called out to protect. And as the day advanced and the engine drivers 
-							and stokers refused to return to London, the pressure of the flight drove the people in an ever-thickening multitude away from the stations and along the 
-							northward-running roads.  By midday a Martian had been seen at Barnes, and a cloud of slowly sinking black vapour drove along the Thames and across the flats 
-							of Lambeth, cutting off all escape over the bridges in its sluggish advance.  Another bank drove over Ealing, and surrounded a little island of survivors on 
-							Castle Hill, alive, but unable to escape.  So he got out of the fury of the panic, and, skirting the Edgware Road, reached Edgware about seven, fasting and 
-							wearied, but well ahead of the crowd.  Along the road people were standing in the roadway, curious, wondering.  He was passed by a number of</p>
 						
 						</x-slide>
 						
@@ -113,6 +152,8 @@
 	
 
 	</div>
+
+	
 
 	<x-mediaquery 
 		id="small_desktop"
@@ -156,12 +197,58 @@
 
 (function(){
 	document.addEventListener('DOMComponentsLoaded', function(){
-		var li = document.createElement('li');
-		var todo = document.createElement('x-todo-item');
-		todo.setData({ title: 'Test todo item', description: 'testing' });
-		li.appendChild(todo);
-		xtag.query(document, '#todo-list')[0].appendChild(li);
+
 	});
+
+	xtag.addEvent(xtag.query(document, '#global_menu')[0], 'command', function(e){
+		console.log("command", e.target.dataset.action);
+		var todoList = xtag.query(document, 'x-todo-list')[0];
+		
+		switch(e.target.dataset.action){
+			case 'active':
+				todoList.query = '{ "completed": false }';
+				break;
+			case 'starred':
+				todoList.query = '{ "starred": true }';
+				break;
+			case 'completed':
+				todoList.query = '{ "completed": true }';
+				break;
+		}
+	});
+
+	xtag.addEvent(xtag.query(document, '#global_actions')[0], 'command', function(e){
+
+		switch(e.target.dataset.action){
+			case 'new':
+				var item = document.createElement('x-todo-item');
+				item.setAttribute('data-template', 'edit');
+				setDetail(item);
+				break;
+			case 'settings':
+				document.getElementById('flipbox').flipped = true;
+				break;
+		}
+	});
+
+
+	xtag.addEvent(xtag.query(document, "#list" )[0], 'click:delegate(x-todo-item)', function(e){
+
+		var selected = document.createElement('x-todo-item');
+		selected.dataset.pk = this.dataset.pk;
+		setDetail(selected);
+	});
+
+	function setDetail(node){
+		var detail = document.getElementById('detail');
+		detail.innerHTML = '';
+		detail.appendChild(node);
+		xtag.removeClass(document.getElementById('flipbox'), 'x-card-flipped');
+	}
+
+
+
+	
 	
 })();
 

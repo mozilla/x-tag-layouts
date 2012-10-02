@@ -65,7 +65,7 @@
 }
 
 #detail {
-	overflow: auto;
+	/*overflow: auto;*/
 }
 
 
@@ -93,7 +93,7 @@
 
 #app.small_desktop #detail, 
 #app.med_desktop #detail {
-	width: 62% !important;
+	/*width: 62% !important;*/
 }
 
 #app.large_desktop  #content > x-actionbar {
