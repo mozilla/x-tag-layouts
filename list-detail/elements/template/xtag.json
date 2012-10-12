@@ -1,0 +1,17 @@
+{	
+	"name": "Template",
+	"tagName": "x-template",
+	"version": "0.0.1",
+	"author": "Daniel Buchner",
+	"description": "The primary element used in templating and data inflation for custom elements",
+	"images": [],	
+	"categories": ["behavioral"],
+	"compatibility": {	
+		"firefox": 6,
+		"chrome": 9,
+		"ie": 9,
+		"opera": 12,
+		"android": 2.1,
+		"ios": 5
+	}
+}

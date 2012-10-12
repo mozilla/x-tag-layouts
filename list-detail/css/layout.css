@@ -60,11 +60,11 @@
 	height: 100%;
 }
 
-#list {
+x-slide.list {
 	overflow: auto;
 }
 
-#detail {
+x-slide.detail {
 	/*overflow: auto;*/
 }
 
@@ -79,21 +79,26 @@
 	left: 60px !important;
 }
 
-#app.small_desktop #views, 
 #app.med_desktop #views, 
 #app.large_desktop #views {
 	width: 100% !important;
 	transform: translateX(0%) !important;
 }
 
-#app.small_desktop #list, 
-#app.med_desktop #list {
+#app.small_desktop #views > x-slide {
+	
+}
+
+#app.small_desktop x-slide.detail{
+
+}
+
+#app.med_desktop x-slide.list {
 	width: 38% !important;
 }
 
-#app.small_desktop #detail, 
-#app.med_desktop #detail {
-	/*width: 62% !important;*/
+#app.med_desktop x-slide.detail {
+	width: 72% !important;
 }
 
 #app.large_desktop  #content > x-actionbar {
@@ -104,10 +109,10 @@
 	width: 24px;
 }
 
-#app.large_desktop #list {
+#app.large_desktop x-slide.list {
 	width: 28% !important;
 }
 
-#app.large_desktop #detail {
+#app.large_desktop x-slide.detail {
 	width: 72% !important;
 }

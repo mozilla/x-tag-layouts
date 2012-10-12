@@ -103,12 +103,17 @@
 	border: none;
 }
 
-#list ul {
+#list ul , #detail ul{
 	list-style: none;
 	padding: 0;
 	margin: 0;
 }
 
-#list h4 {
+#list h3 {
 	margin-bottom: 2px;
+}
+x-modal {
+	padding: 20px;
+	z-index: 999;
+	position: absolute;
 }

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8" />
+		
+		<title>X-Tag - a cross-browser web components library</title>
+		
+		
+		<link rel="stylesheet" type="text/css" href="../template.css"/>		
+		
+		<script type="text/javascript" src="../../lib/x-tag/x-tag.js"></script>		
+		<script type="text/javascript" src="../template.js"></script>
+		
+		<style type="text/css">
+			x-foo {
+				float: left;
+				padding: 10px;
+				margin: 12px;
+				background: #eee;
+				border: 1px solid #ccc;
+			}
+			
+			x-foo .checked {
+				color: green;
+			}
+		</style>
+		
+		<x-template name="template1">
+			<script type="template/script">
+				this.addTemplateListeners({
+					'change:delegate(input)': function(e){
+						if (this.checked) xtag.addClass(e.templateTarget.firstElementChild, 'checked');
+						else xtag.removeClass(e.templateTarget.firstElementChild, 'checked');
+					}
+				});
+			</script>
+
+			<script type="template/content">
+				<h1>{foo}!</h1>
+				<p>{bar}!</p>
+				<input name="boohoo" type="checkbox" />
+			</script>
+		</x-template>
+		
+		<x-template name="template2">
+			<script type="template/script">
+				console.log(this);
+			</script>
+
+			<script type="template/content">
+				<h3>{foo}?</h3>
+				<em>{bar}?</em>
+			</script>
+		</x-template>
+		
+	</head>
+
+<body id="app">
+
+<div id="buttons">
+	<button id="template1" foo="bar" boo="hoo">Activate Template 1</button>
+	<button id="template2">Activate Template 2</button>
+	<button id="changeTemplate">Change Template 1</button>
+	<button id="switchScript">Switch Script 1</button>
+</div>
+
+<x-foo></x-foo>
+<x-foo></x-foo>
+<x-foo></x-foo>
+<x-foo></x-foo>
+<x-foo></x-foo>	
+
+</body>
+
+<script type="text/javascript">
+	
+	xtag.register('x-foo', {
+		mixins: ['template'],
+		onCreate: function(){
+			this.xtag.entityData = {
+				foo: 'Foo',
+				bar: 'Bar bar bar'
+			}
+		}
+	});
+	
+	xtag.addEvents(document.getElementById('buttons'), {
+		'click:delegate(#template1, #template2)': function(e){
+			var button = this;
+			xtag.query(document, 'x-foo').forEach(function(el){
+				el.template = button.id;
+			});
+		},
+		'click:delegate(#changeTemplate)': function(e){
+			var button = this;
+			xtag.query(document, 'x-template[name="template1"]')[0].content = '<h3>{foo}!</h3><ul><li>{bar}!</li></ul>';
+		},
+		'click:delegate(#switchScript)': function(){
+			xtag.query(document, 'x-template[name="template1"]')[0].script = function(){
+				this.addTemplateListeners({
+					'click:delegate(h1)': function(e){
+						console.log(e, this);
+						if (!this.classList.contains('checked')) xtag.addClass(e.templateTarget.firstElementChild, 'checked');
+						else xtag.removeClass(e.templateTarget.firstElementChild, 'checked');
+					}
+				});;
+			}
+		}
+	});
+
+</script>
+
+</html>

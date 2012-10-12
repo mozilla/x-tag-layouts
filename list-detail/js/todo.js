@@ -1,59 +1,27 @@
-document.addEventListener('DOMComponentsLoaded', function(){
-	// load current todos
-
-});
 
 xtag.mixins.databind = {
 	onCreate: function(){
 		this.xtag.entityData = {};
 	},
 	onInsert: function(){
-		console.log("onInsert.databind");
-		xtag.toArray(this.children).forEach(function(elem){
-			console.log('FOUND children', elem, elem.nodeName);
-			try{
-				if (elem.nodeName == 'X-VALUE'){
-					console.log("found x-value", elem.getAttribute('key'));
-					this[elem.getAttribute('key')] = elem.innerHTML;
-				}
-			}catch(e){
-				console.log("ERROR", e);
-			}
-		});
+		console.log("onInsert.databind, firing dataentitycreated:", this.pk);
 		xtag.fireEvent(this, 'dataentitycreated');
 	},
 	events:{
-		'datapropertychanged:delegate(x-value)': function(e, elem){
-			this[elem.getAttribute('key')] = elem.innerHTML;
-		}
+
 	},
 	getters:{
 		pk: function(){
-			return this.getAttribute('data-pk');
+			return this.dataset.pk;
 		}
 	},
-	methods: {
-		setData: function(data){
-			this._populateData(data);
-			this.xtag.entityData = data;
-			this.setAttribute('data-hasdata', true);
-			xtag.fireEvent(this, 'dataavailable', { bubbles: false });
-		}, 
-		_populateData: function(data){
-			//set setters with data
-			if (!this.pk && data.pk) this.setAttribute('data-pk') = data.pk;
-			for (var k in data){
-				if (this[this.xtag.propertyMap[k]] != data[k]){
-					this[this.xtag.propertyMap[k]] = data[k];
-				}
-			}
-		}, 
-		refresh: function(){
-			this.setAttribute('data-hasdata') = false;
-			xtag.fireEvent(this, 'dataentitycreated');
+	setters:{
+		pk: function(value){
+			this.dataset.pk = value;
 		}
 	}
 }
+
 xtag.pseudos.databind = {
 	/*
 		create mapping between getter/setter and datastore key
@@ -67,7 +35,6 @@ xtag.pseudos.databind = {
 	}, 
 	listener: function(pseudo, fn, args){
 		var property = pseudo.key.split(':')[0];
-		console.log("data")
 		if (this[property] !== args[0]){
 			this.xtag.entityData[property] = args[0];
 			xtag.fireEvent(this, 'datapropertychanged', { 
@@ -97,81 +64,28 @@ xtag.register('x-value', {
 	}
 });
 
-xtag.register('x-template', {
-	getters: {
-		content: function(){
-			var frag = document.createDocumentFragment();
-			frag.innerHTML = this.innerHTML;
-			return frag;
-		}
-	},
-	methods:{
-		render: function(data){
-			console.log("rendering template '" + this.id + "' with data", data);
-			var template = this.innerHTML;
-			template = template.replace(/\${(\w+)}/g, function(match, name, value){
-				return typeof data[name] != 'undefined' ? data[name] : '';
-			});
-			var temp = document.createElement('div'),
-				frag = document.createDocumentFragment();
-			temp.innerHTML = template;
-			xtag.toArray(temp.children).forEach(function(elem){
-				frag.appendChild(elem);
-			});
-			return frag;
-		}
-	}
-});
-
-var templates = { 
-	list: 	'x-todo-item-list',
-	detail: 'x-todo-item-detail',
-	edit: 	'x-todo-item-edit'
-}
-
-function renderTemplate(){
-
-	var selector = templates[this.getAttribute('data-template')] || templates['list'];
-
-	console.log("render template", selector, this.xtag.entityData);
-	template = document.getElementById(selector);	
-	template = template.render(this.xtag.entityData);
-	this.innerHTML = '';
-	this.appendChild(template);
-	this.xtag.title = xtag.query(this, '.x-todo-item-title')[0];
-	this.xtag.description = xtag.query(this, '.x-todo-item-description')[0];
-}
-
 
 xtag.register('x-todo-item', {
-	onCreate: function(){		
-		this.xtag.entityData = {};
+	mixins: ['template', 'databind'],
+	onCreate: function(){	
+		this.setAttribute('template', 'todo-item-list');
 	},
 	onInsert: function(){
-		console.log("onInsert");
-		if (this.innerHTML == '') renderTemplate.call(this);
-		xtag.fireEvent(this, 'dataentitycreated');
+		
 	},
 	events: {
-		'dataavailable': function(e, elem){			
-			renderTemplate.call(this);
-		},
+		
 	},
 	setters: {
-		'title:databind()': function(value){		
-			if (this.xtag.title) this.xtag.title.innerHTML = value;			
+		'title:databind()': function(){
 		}, 
-		'description:databind(body)': function(value){
-			if (this.xtag.description) this.xtag.description.innerHTML = value;			
+		'description:databind(body)': function(){
 		}, 
 		'date:databind()': function(){
-
 		}, 
 		'starred:databind()': function(){
-
 		}, 
 		'completed:databind()': function(){
-			
 		}
 	},
 	getters: {
@@ -182,31 +96,21 @@ xtag.register('x-todo-item', {
 			return this.xtag.entityData.description;
 		}, 
 		date: function(){
-
 		}, 
 		starred: function(){
-
 		}, 
 		completed: function(){
-
-		}, 
-		template: function(){
-
 		}
 	}
 });
 
 
 xtag.register('x-todo-list', {
-	onCreate: function(){
-
-	}, 
 	onInsert: function(){
 		this.refresh();
 	}, 
 	setters: {
 		for: function(){
-
 		}, 
 		query: function(value){
 			this.setAttribute('query', value);
@@ -231,9 +135,9 @@ xtag.register('x-todo-list', {
 					console.log("DATASOURCE RETURNED", items.length, "ITEMS");
 					items.forEach(function(item){
 						var todo = document.createElement('x-todo-item');
+						todo.setAttribute('template', 'todo-item-list');
 						todo.dataset.pk = item.ID;
 						for (var k in item){
-							console.log("setting prop:", k);
 							todo[k] = item[k];
 						}
 						self.appendChild(todo);
@@ -264,13 +168,18 @@ function locateProvider(target, fn){
 }
 
 document.addEventListener('datapropertychanged', function(e){
-	//console.log("datapropertychanged", e.dataProperty, e);
+	console.log("datapropertychanged", e.dataProperty, e);
 	locateProvider(e.target, function(db){
 		var pk = e.target.getAttribute('data-pk');
+		console.log("DPC:", pk);
 		if (pk){
 			var obj = {};
 			obj[e.dataProperty.key] = e.dataProperty.value;
+			console.log("datapropertychanged", obj);
+
 			db.update(Number(pk), obj, function(entity){
+				console.log("UPDATED:",pk, entity);
+				e.target.xtag.entityData = entity;
 				xtag.fireEvent(e.target, 'datapropertysaved', 
 					{ entityData: entity }, { bubbles: false });
 			});
@@ -278,16 +187,25 @@ document.addEventListener('datapropertychanged', function(e){
 	});
 });
 
+document.addEventListener('dataentityupdated', function(e){
+
+	locateProvider(e.target, function(db){
+
+	});
+
+});
+
 document.addEventListener('dataentitycreated', function(e){
 	//console.log("dataentitycreated", e.target.getAttribute('data-pk'));
 	locateProvider(e.target, function(db){
-		var pk = e.target.getAttribute('data-pk');
+		var pk = e.target.pk;
 		console.log("dataentitycreated: pk", pk)
-		if (pk && pk != 'undefined'){
+		if (pk){
 
 			db.get(Number(pk), function(entity){
 				// fire event or set data automaticaly?  both?
-				e.target.entityData = entity;
+				console.log("Setting entityData", entity);
+				e.target.xtag.entityData = entity;
 			});
 		} else {			
 			var entity = db.insert(e.target.xtag.entityData);			
@@ -296,7 +214,6 @@ document.addEventListener('dataentitycreated', function(e){
 		}
 	});
 });
-
 
 xtag.register('x-localstorage', {
 	onCreate: function(){
@@ -368,13 +285,15 @@ xtag.register('x-localstorage', {
 		}, 
 		update: function(id, data, callback){
 			var updated = null;
-			this.query({ ID: id }, function(row){
+			
+			this.xtag.storage.update(this.table, { ID: id }, function(row){
 				for (var key in data){
 					if (key != 'ID') row[key] = data[key];					
 				}
 				updated = row;
 				return row;
 			});
+			this.xtag.storage.commit();
 			if (callback) callback(updated);
 			else return updated;
 		},
@@ -611,7 +530,7 @@ function localStorageDB(db_name) {
 						new_data[field] = updated_data[field];
 					}
 				}
-
+				
 				db.data[table_name][ID] = validFields(table_name, new_data);
 				num++;
 			}
@@ -801,7 +720,6 @@ function localStorageDB(db_name) {
 			if(!query) {
 				result_ids = getIDs(table_name, limit); // no conditions given, return all records
 			} else if(typeof query == 'object') {			// the query has key-value pairs provided
-				console.log("about to queryByValues", query);
 				result_ids = queryByValues(table_name, validFields(table_name, query), limit);
 			} else if(typeof query == 'function') {		// the query has a conditional map function provided
 				result_ids = queryByFunction(table_name, query, limit);
@@ -825,4 +743,3 @@ function localStorageDB(db_name) {
 		}
 	}
 }
-
