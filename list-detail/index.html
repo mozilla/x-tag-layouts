@@ -14,17 +14,7 @@
 	<link rel="stylesheet" type="text/css" href="elements/flipbox/flipbox.css" />
 	<link rel="stylesheet" type="text/css" href="elements/modal/modal.css" />
 
-	<script type="text/javascript" src="js/x-tag.js"></script>
-	<script type="text/javascript" src="js/list-view.js"></script>
-	<script type="text/javascript" src="elements/actionbar/actionbar.js"></script>	
-	<script type="text/javascript" src="elements/flipbox/flipbox.js"></script>
-	<script type="text/javascript" src="elements/mediaquery/mediaquery.js"></script>
-	<script type="text/javascript" src="elements/modal/modal.js"></script>
-	<script type="text/javascript" src="elements/shiftbox/shiftbox.js"></script>
-	<script type="text/javascript" src="elements/slidebox/slidebox.js"></script>
-	<script type="text/javascript" src="elements/template/template.js"></script>
-
-	<script type="text/javascript" src="js/todo.js"></script>
+	
 
 	<style type="text/css">
 		x-template{
@@ -89,6 +79,7 @@
 								{ dataProperty: { key: key, value: newTodo[key] }});
 						}
 						document.getElementsByTagName('x-todo-list')[0].refresh();
+						Layout.home();
 					}
 				});
 		</script>
@@ -220,6 +211,18 @@
 	</x-mediaquery>
 
 </body>
+
+<script type="text/javascript" src="js/x-tag.js"></script>
+	<script type="text/javascript" src="js/list-view.js"></script>
+	<script type="text/javascript" src="elements/actionbar/actionbar.js"></script>	
+	<script type="text/javascript" src="elements/flipbox/flipbox.js"></script>
+	<script type="text/javascript" src="elements/mediaquery/mediaquery.js"></script>
+	<script type="text/javascript" src="elements/modal/modal.js"></script>
+	<script type="text/javascript" src="elements/shiftbox/shiftbox.js"></script>
+	<script type="text/javascript" src="elements/slidebox/slidebox.js"></script>
+	<script type="text/javascript" src="elements/template/template.js"></script>
+
+	<script type="text/javascript" src="js/todo.js"></script>
 
 <script type="text/javascript">
 

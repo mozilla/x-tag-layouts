@@ -13,5 +13,16 @@
 		"opera": 12,
 		"android": 2.1,
 		"ios": 5
+	}, 
+	"documentation":{
+		"description": "", 
+		"getters":{
+			"renderer": "",
+			"name": "",
+		}, 
+		"setters" :{
+
+		}
+
 	}
 }

@@ -10,6 +10,7 @@
 			var detail = document.getElementById('detail');
 			detail.innerHTML = '';
 			detail.appendChild(node);
+			xtag.query(document, '#slidebox')[0].slideTo(1);
 			xtag.removeClass(document.getElementById('flipbox'), 'x-card-flipped');
 		}, 
 		slideToDetail: function(){
@@ -20,11 +21,16 @@
 			modal.setAttribute('overlay','');
 			modal.innerHTML = '<h2>Settings</h2><p>Email Updates:<input type="checkbox" checked /></p><p>Email:<input name="email"/></p><button>Ok</button>';
 			xtag.addEvent(modal, 'click:delegate(button)', function(e){
-				console.log("ok");
 				modal.parentNode.removeChild(modal);
 			});
 			document.body.appendChild(modal);
-			//document.getElementById('flipbox').flipped = true;
+		}, 
+		home: function(){
+			var slidebox =  document.getElementById('slidebox');
+			var idx = slidebox.selectedIndex;
+			if (idx == 1){
+				slidebox.slideTo(0);
+			}
 		}
 	}
 
@@ -37,6 +43,10 @@
 				document.getElementById('content').shift = 0;
 			}
 		});
+
+
+		document.getElementById('logo').addEventListener('click', Layout.home);
+		document.getElementById('wordmark').addEventListener('click', Layout.home);
 
 		/*
 			Shift menu around based on matching media query 

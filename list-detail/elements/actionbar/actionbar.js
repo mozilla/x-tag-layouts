@@ -8,7 +8,7 @@
 					actions = group ? xtag.query(this.parentNode, '[for="' + group + '"]') : false,
 					modal = document.querySelector('[data-action-group-modal="' + group + '"]'),
 					command = this.getAttribute('command'),
-					node = (document.getElementById(this.getAttribute('data-modal-target')) || document.body);
+					node = this.getAttribute('data-modal-target') ? document.getElementById(this.getAttribute('data-modal-target')) : document.body;
 
 				if (actions && !modal){			
 					var overlay = document.createElement('x-overlay');

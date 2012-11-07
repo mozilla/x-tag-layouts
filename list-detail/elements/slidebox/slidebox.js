@@ -50,6 +50,11 @@
 				init.call(this, true);
 			},
 		},
+		getters: {
+			'selectedIndex': function(){
+				return getState(this)[0];
+			}
+		},
 		methods: {
 			slideTo: function(index){
 				slide(this, index);

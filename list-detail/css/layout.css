@@ -94,7 +94,7 @@ x-slide.detail {
 }
 
 #app.med_desktop x-slide.list {
-	width: 38% !important;
+	width: 28% !important;
 }
 
 #app.med_desktop x-slide.detail {
@@ -116,3 +116,4 @@ x-slide.detail {
 #app.large_desktop x-slide.detail {
 	width: 72% !important;
 }
+

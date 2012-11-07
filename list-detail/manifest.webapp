@@ -1,0 +1,16 @@
+{
+  "version": "0.1",
+  "name": "List Detail Layout (x-tag)",
+  "description": "Your new awesome Open Web App",
+  "launch_path": "index.html",
+  "icons": {
+    "16": "/img/icons/mortar-16.png",
+    "48": "/img/icons/mortar-48.png",
+    "128": "/img/icons/mortar-128.png"
+  },
+  "developer": {
+    "name": "Arron Schaar",
+    "url": "http://yourawesomeapp.com"
+  },
+  "installs_allowed_from": ["*"]
+}

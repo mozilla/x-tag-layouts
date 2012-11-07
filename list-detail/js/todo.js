@@ -4,7 +4,6 @@ xtag.mixins.databind = {
 		this.xtag.entityData = {};
 	},
 	onInsert: function(){
-		console.log("onInsert.databind, firing dataentitycreated:", this.pk);
 		xtag.fireEvent(this, 'dataentitycreated');
 	},
 	events:{
