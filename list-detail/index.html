@@ -47,9 +47,7 @@
 					selected.template = 'todo-item-detail';
 
 					var currentDetail = document.getElementById('detail').children[0];
-					if (!currentDetail || currentDetail.pk != e.templateTarget.pk || currentDetail.template != selected.template){							
-						Layout.setDetail(selected);
-					}
+					Layout.setDetail(selected);
 				}
 			});
 			this.beforeRender = function(obj){

@@ -167,17 +167,12 @@ function locateProvider(target, fn){
 }
 
 document.addEventListener('datapropertychanged', function(e){
-	console.log("datapropertychanged", e.dataProperty, e);
 	locateProvider(e.target, function(db){
 		var pk = e.target.getAttribute('data-pk');
-		console.log("DPC:", pk);
 		if (pk){
 			var obj = {};
 			obj[e.dataProperty.key] = e.dataProperty.value;
-			console.log("datapropertychanged", obj);
-
 			db.update(Number(pk), obj, function(entity){
-				console.log("UPDATED:",pk, entity);
 				e.target.xtag.entityData = entity;
 				xtag.fireEvent(e.target, 'datapropertysaved', 
 					{ entityData: entity }, { bubbles: false });
@@ -195,14 +190,10 @@ document.addEventListener('dataentityupdated', function(e){
 });
 
 document.addEventListener('dataentitycreated', function(e){
-	console.log("dataentitycreated", e.target.getAttribute('data-pk'));
 	locateProvider(e.target, function(db){
 		var pk = e.target.pk;
-		console.log("fdf", e.target.pk)
 		if (pk){
 			db.get(Number(pk), function(entity){
-				// fire event or set data automaticaly?  both?
-				console.log("found and populating", entity);
 				e.target.xtag.entityData = entity;
 			});
 		} else {			
@@ -283,7 +274,6 @@ xtag.register('x-localstorage', {
 		}, 
 		update: function(id, data, callback){
 			var updated = null;
-			
 			this.xtag.storage.update(this.table, { ID: id }, function(row){
 				for (var key in data){
 					if (key != 'ID') row[key] = data[key];					
@@ -296,7 +286,6 @@ xtag.register('x-localstorage', {
 			else return updated;
 		},
 		insert: function(data, callback){
-			console.log("DEBUG INSERT", data);
 			var id = this.xtag.storage.insert(this.table, data);
 			this.xtag.storage.commit();
 			if (callback) this.get(id, callback);

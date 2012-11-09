@@ -8,11 +8,18 @@ Layout = {
 		var detail = document.getElementById('detail');
 		detail.innerHTML = '';
 		detail.appendChild(node);
-		xtag.query(document, '#slidebox')[0].slideTo(1);
+		this.slideToDetail();
 		xtag.removeClass(document.getElementById('flipbox'), 'x-card-flipped');
 	}, 
 	slideToDetail: function(){
-		document.getElementById('slidebox').slideNext();
+		var app = document.getElementById('app');
+		var hasClass = xtag.hasClass;
+		if (hasClass(app,'large_desktop') || 
+			hasClass(app,'med_desktop') || hasClass(app,'tablet')){
+			//do nothing
+		}else{
+			document.getElementById('slidebox').slideTo(1);
+		}
 	},
 	showSettings: function(){
 		var modal = document.createElement('x-modal');
@@ -64,8 +71,10 @@ document.addEventListener('DOMComponentsLoaded', function(){
 	*/
 	document.getElementById('global_actions_trigger').addEventListener('click', function(e){
 		if (document.getElementById('content').shift == 0){
+			xtag.addClass(e.target, 'open');
 			document.getElementById('content').shift = Layout.settings.smallMenuWidth;
 		} else {
+			xtag.removeClass(e.target, 'open');
 			document.getElementById('content').shift = 0;
 		}
 	});
@@ -83,10 +92,12 @@ document.addEventListener('DOMComponentsLoaded', function(){
 	});
 
 	document.getElementById('med_desktop').addEventListener('mediaqueryactive', function(){
-		toggleShift.apply(this, [Layout.settings.smallMenuWidth, 'full']);
+		document.getElementById('slidebox').slideTo(0);
+		toggleShift.apply(this, [0, 'full']);
 	});
 
 	document.getElementById('large_desktop').addEventListener('mediaqueryactive', function(){
+		document.getElementById('slidebox').slideTo(0);
 		toggleShift.apply(this, [Layout.settings.largeMenuWidth, 'full']);
 		document.querySelector('#content > x-actionbar').setAttribute('data-mode', 'full');
 	});
@@ -96,6 +107,7 @@ document.addEventListener('DOMComponentsLoaded', function(){
 	});
 
 	document.getElementById('tablet').addEventListener('mediaqueryactive', function(){
+		document.getElementById('slidebox').slideTo(0);
 		toggleShift.apply(this, [Layout.settings.smallMenuWidth, 'full']);
 	});
 
