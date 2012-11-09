@@ -1,92 +1,110 @@
-(function(){
-
-	//global
-	Layout = {
-		settings:{
-			smallMenuWidth: 60, 
-			largeMenuWidth: 120
-		}, 
-		setDetail: function(node){
-			var detail = document.getElementById('detail');
-			detail.innerHTML = '';
-			detail.appendChild(node);
-			xtag.query(document, '#slidebox')[0].slideTo(1);
-			xtag.removeClass(document.getElementById('flipbox'), 'x-card-flipped');
-		}, 
-		slideToDetail: function(){
-			document.getElementById('slidebox').slideNext();
-		},
-		showSettings: function(){
-			var modal = document.createElement('x-modal');
-			modal.setAttribute('overlay','');
-			modal.innerHTML = '<h2>Settings</h2><p>Email Updates:<input type="checkbox" checked /></p><p>Email:<input name="email"/></p><button>Ok</button>';
-			xtag.addEvent(modal, 'click:delegate(button)', function(e){
+//global
+Layout = {
+	settings:{
+		smallMenuWidth: 60, 
+		largeMenuWidth: 120
+	}, 
+	setDetail: function(node){
+		var detail = document.getElementById('detail');
+		detail.innerHTML = '';
+		detail.appendChild(node);
+		xtag.query(document, '#slidebox')[0].slideTo(1);
+		xtag.removeClass(document.getElementById('flipbox'), 'x-card-flipped');
+	}, 
+	slideToDetail: function(){
+		document.getElementById('slidebox').slideNext();
+	},
+	showSettings: function(){
+		var modal = document.createElement('x-modal');
+		var settings = document.createElement('x-todo-settings');
+		modal.appendChild(settings);
+		modal.setAttribute('overlay','');
+		xtag.addEvents(modal, {
+			'click:delegate(button)' : function(e){
 				modal.parentNode.removeChild(modal);
-			});
-			document.body.appendChild(modal);
-		}, 
-		home: function(){
-			var slidebox =  document.getElementById('slidebox');
-			var idx = slidebox.selectedIndex;
-			if (idx == 1){
-				slidebox.slideTo(0);
-			}
-		}
-	}
-
-	document.addEventListener('DOMComponentsLoaded', function(){
-		//Toggle shift menu for small layouts
-		document.getElementById('global_actions_trigger').addEventListener('click', function(e){
-			if (document.getElementById('content').shift == 0){
-				document.getElementById('content').shift = Layout.settings.smallMenuWidth;
-			} else {
-				document.getElementById('content').shift = 0;
-			}
-		});
-
-
-		document.getElementById('logo').addEventListener('click', Layout.home);
-		document.getElementById('wordmark').addEventListener('click', Layout.home);
-
-		/*
-			Shift menu around based on matching media query 
-		*/
-		function toggleShift(amount, mode){
-			document.getElementById('content').shift = Number(amount);
-			document.getElementById('global_actions').setAttribute('data-mode', mode);
-		}
+			}, 
+			'modalhide': function(e){
+				modal.parentNode.removeChild(modal);
+			}}
+		);
+		document.body.appendChild(modal);
 		
-		document.getElementById('small_desktop').addEventListener('mediaqueryactive', function(){
-			toggleShift.apply(this, [0, 'icon']);
-			
-		});
+	}, 
+	home: function(){
+		var slidebox =  document.getElementById('slidebox');
+		var idx = slidebox.selectedIndex;
+		if (idx == 1){
+			slidebox.slideTo(0);
+		}
+	}, 
+	refreshList: function(){
+		document.getElementById('list').refresh();
+	}
+}
 
-		document.getElementById('med_desktop').addEventListener('mediaqueryactive', function(){
-			toggleShift.apply(this, [Layout.settings.smallMenuWidth, 'full']);
-		});
 
-		document.getElementById('large_desktop').addEventListener('mediaqueryactive', function(){
-			toggleShift.apply(this, [Layout.settings.largeMenuWidth, 'full']);
-			document.querySelector('#content > x-actionbar').setAttribute('data-mode', 'full');
-		});
+xtag.register('x-todo-settings', {
+	mixins: ['template'],
+	onCreate: function(){
+		this.setAttribute('template', 'todo-settings');
+	}, 
+	onInsert: function(){
+		console.log("sdfsdf");
 
-		document.getElementById('large_desktop').addEventListener('mediaqueryinactive', function(){		
-			document.querySelector('#content > x-actionbar').removeAttribute('data-mode');
-		});
+	}
+});
 
-		document.getElementById('tablet').addEventListener('mediaqueryactive', function(){
-			toggleShift.apply(this, [Layout.settings.smallMenuWidth, 'full']);
-		});
+document.addEventListener('DOMComponentsLoaded', function(){
 
-		document.getElementById('phone_portrait').addEventListener('mediaqueryactive', function(){
-			toggleShift.apply(this, [0, 'icon']);
-		});
+	document.getElementById('logo').addEventListener('click', Layout.home);
+	document.getElementById('wordmark').addEventListener('click', Layout.home);
 
-		document.getElementById('phone_landscape').addEventListener('mediaqueryactive', function(){
-			toggleShift.apply(this, [0, 'icon']);
-		});
-
+	/*
+		Toggle shift menu for small layouts
+	*/
+	document.getElementById('global_actions_trigger').addEventListener('click', function(e){
+		if (document.getElementById('content').shift == 0){
+			document.getElementById('content').shift = Layout.settings.smallMenuWidth;
+		} else {
+			document.getElementById('content').shift = 0;
+		}
 	});
 
+	/*
+		Shift menu around based on matching media query 
+	*/
+	function toggleShift(amount, mode){
+		document.getElementById('content').shift = Number(amount);
+		document.getElementById('global_actions').setAttribute('data-mode', mode);
+	}
+	
+	document.getElementById('small_desktop').addEventListener('mediaqueryactive', function(){
+		toggleShift.apply(this, [0, 'icon']);
+	});
 
-})();
+	document.getElementById('med_desktop').addEventListener('mediaqueryactive', function(){
+		toggleShift.apply(this, [Layout.settings.smallMenuWidth, 'full']);
+	});
+
+	document.getElementById('large_desktop').addEventListener('mediaqueryactive', function(){
+		toggleShift.apply(this, [Layout.settings.largeMenuWidth, 'full']);
+		document.querySelector('#content > x-actionbar').setAttribute('data-mode', 'full');
+	});
+
+	document.getElementById('large_desktop').addEventListener('mediaqueryinactive', function(){		
+		document.querySelector('#content > x-actionbar').removeAttribute('data-mode');
+	});
+
+	document.getElementById('tablet').addEventListener('mediaqueryactive', function(){
+		toggleShift.apply(this, [Layout.settings.smallMenuWidth, 'full']);
+	});
+
+	document.getElementById('phone_portrait').addEventListener('mediaqueryactive', function(){
+		toggleShift.apply(this, [0, 'icon']);
+	});
+
+	document.getElementById('phone_landscape').addEventListener('mediaqueryactive', function(){
+		toggleShift.apply(this, [0, 'icon']);
+	});
+
+});

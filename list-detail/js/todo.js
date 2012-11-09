@@ -1,14 +1,10 @@
-
 xtag.mixins.databind = {
 	onCreate: function(){
 		this.xtag.entityData = {};
 	},
 	onInsert: function(){
 		xtag.fireEvent(this, 'dataentitycreated');
-	},
-	events:{
-
-	},
+	},	
 	getters:{
 		pk: function(){
 			return this.dataset.pk;
@@ -45,25 +41,6 @@ xtag.pseudos.databind = {
 }
 
 
-xtag.register('x-value', {
-	onInsert: function(){
-		var self = this;
-		var parentElem = this.parentNode;
-		if (!parentElem.hasAttribute('data-valuepopulating')){
-			parentElem.setAttribute('data-valuepopulating', '');
-			xtag.toArray(parentElem.children).forEach(function(elem){
-				if (elem.nodeName == 'X-VALUE'){
-					parentElem[elem.getAttribute('key')] = elem.innerHTML;
-				}
-			});
-			parentElem.innerHTML = '';
-			parentElem.removeAttribute('data-valuepopulating');
-			xtag.fireEvent(parentElem, 'dataavailable', {}, { bubbles: false });
-		}
-	}
-});
-
-
 xtag.register('x-todo-item', {
 	mixins: ['template', 'databind'],
 	onCreate: function(){	
@@ -95,10 +72,13 @@ xtag.register('x-todo-item', {
 			return this.xtag.entityData.description;
 		}, 
 		date: function(){
+			return this.xtag.entityData.date;
 		}, 
 		starred: function(){
+			return this.xtag.entityData.starred;
 		}, 
 		completed: function(){
+			return this.xtag.entityData.completed;
 		}
 	}
 });
@@ -128,10 +108,8 @@ xtag.register('x-todo-list', {
 			var datasource = document.getElementById(this.getAttribute('for'));
 			if (datasource){
 				var query = {};
-				try { query = JSON.parse(this.query.replace(/'/g,"\"")); } catch(e) {};
-				console.log("QUERY", query, this.query);
-				datasource.query(query, function(items){
-					console.log("DATASOURCE RETURNED", items.length, "ITEMS");
+				try { query = JSON.parse(this.query.replace(/'/g,"\"")); } catch(e) {};				
+				datasource.query(query, function(items){					
 					items.forEach(function(item){
 						var todo = document.createElement('x-todo-item');
 						todo.setAttribute('template', 'todo-item-list');
@@ -143,6 +121,28 @@ xtag.register('x-todo-list', {
 					});
 				});
 			}
+		}
+	}
+});
+
+
+
+
+
+xtag.register('x-value', {
+	onInsert: function(){
+		var self = this;
+		var parentElem = this.parentNode;
+		if (!parentElem.hasAttribute('data-valuepopulating')){
+			parentElem.setAttribute('data-valuepopulating', '');
+			xtag.toArray(parentElem.children).forEach(function(elem){
+				if (elem.nodeName == 'X-VALUE'){
+					parentElem[elem.getAttribute('key')] = elem.innerHTML;
+				}
+			});
+			parentElem.innerHTML = '';
+			parentElem.removeAttribute('data-valuepopulating');
+			xtag.fireEvent(parentElem, 'dataavailable', {}, { bubbles: false });
 		}
 	}
 });
@@ -195,15 +195,14 @@ document.addEventListener('dataentityupdated', function(e){
 });
 
 document.addEventListener('dataentitycreated', function(e){
-	//console.log("dataentitycreated", e.target.getAttribute('data-pk'));
+	console.log("dataentitycreated", e.target.getAttribute('data-pk'));
 	locateProvider(e.target, function(db){
 		var pk = e.target.pk;
-		console.log("dataentitycreated: pk", pk)
+		console.log("fdf", e.target.pk)
 		if (pk){
-
 			db.get(Number(pk), function(entity){
 				// fire event or set data automaticaly?  both?
-				console.log("Setting entityData", entity);
+				console.log("found and populating", entity);
 				e.target.xtag.entityData = entity;
 			});
 		} else {			
@@ -297,6 +296,7 @@ xtag.register('x-localstorage', {
 			else return updated;
 		},
 		insert: function(data, callback){
+			console.log("DEBUG INSERT", data);
 			var id = this.xtag.storage.insert(this.table, data);
 			this.xtag.storage.commit();
 			if (callback) this.get(id, callback);
@@ -432,7 +432,7 @@ function localStorageDB(db_name) {
 			}
 			
 			row = db.data[table_name][ID];
-			exists = false;
+			exists = true;
 
 			for(var field in data) {
 				if( !data.hasOwnProperty(field) ) {
@@ -440,16 +440,16 @@ function localStorageDB(db_name) {
 				}
 
 				if(typeof data[field] == 'string') {	// if the field is a string, do a case insensitive comparison
-					if( row[field] && row[field].toString().toLowerCase() == data[field].toString().toLowerCase() ) {
-						exists = true;
-						break;
+					if( row[field] && row[field].toString().toLowerCase() != data[field].toString().toLowerCase() ) {
+						exists = false;
+						continue;
 					}
 				} else {
-					if( row[field] == data[field] ) {
-						exists = true;
-						break;
+					if( row[field] != data[field] ) {
+						exists = false;
+						continue;
 					}
-				}
+				}				
 			}
 			if(exists) {
 				result_ids.push(ID);

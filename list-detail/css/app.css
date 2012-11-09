@@ -1,0 +1,38 @@
+x-todo-item {
+	display: block;	
+	margin-bottom: 3px;
+	border-bottom: solid 2px #ddd;
+}
+x-todo-item:hover {
+
+}
+x-todo-item h3 {
+	margin-top: 0;
+	cursor: pointer;
+}
+
+x-todo-item .todo-properties {
+	margin-top: 3px;
+	font-size: 10pt;
+}
+x-todo-item .date {
+	opacity: 0.5;
+	font-size: 10pt;
+	font-weight: bold;
+}
+x-todo-item .todo-properties span > img {	
+	height: 18px;
+	cursor: pointer;
+	margin-right: 15px;
+}
+x-todo-item span.starred, x-todo-item span.completed, x-todo-item span.edit {
+    opacity: 0.2;
+}
+x-todo-item span.starred:hover, x-todo-item span.completed:hover, x-todo-item span.edit:hover {
+    opacity: 0.6;
+}
+x-todo-item span.starred.selected, x-todo-item span.completed.selected {
+    opacity: 0.5;
+}
+
+

@@ -8,80 +8,117 @@
 	<link rel="stylesheet" type="text/css" href="css/general.css" />
 	<link rel="stylesheet" type="text/css" href="css/layout.css" />
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<link rel="stylesheet" type="text/css" href="css/app.css" />
 	<link rel="stylesheet" type="text/css" href="elements/actionbar/actionbar.css" />
 	<link rel="stylesheet" type="text/css" href="elements/shiftbox/shiftbox.css" />
 	<link rel="stylesheet" type="text/css" href="elements/slidebox/slidebox.css" />
 	<link rel="stylesheet" type="text/css" href="elements/flipbox/flipbox.css" />
-	<link rel="stylesheet" type="text/css" href="elements/modal/modal.css" />
+	<link rel="stylesheet" type="text/css" href="elements/modal/modal.css" />	
 
-	
-
-	<style type="text/css">
-		x-template{
-			display: none;
-		}
-	</style>
-	
 	<x-template name="todo-item-list">
 		<script type="template/script">
-				this.addTemplateListeners({
-					'click:delegate(.edit)': function(e){
-						console.log("edit clicked");
-						var node = document.createElement('x-todo-item');
-						node.pk = e.templateTarget.pk;
-						node.template = 'todo-item-edit';	
-						node.xtag.entityData = e.templateTarget.xtag.entityData;					
-						Layout.setDetail(node);
-					}, 
-					'click:delegate(.completed)': function(e){
-						console.log(e.customElement, this);
-						alert("THIS IS MESSED UP.  e.customELement should be x-todo-item");
+			this.addTemplateListeners({
+				'click:delegate(.edit)': function(e){
+					var node = document.createElement('x-todo-item');
+					node.pk = e.templateTarget.pk;
+					node.template = 'todo-item-edit';	
+					node.xtag.entityData = e.templateTarget.xtag.entityData;					
+					Layout.setDetail(node);
+				}, 
+				'click:delegate(.completed)': function(e){
+					var completed = e.templateTarget.xtag.entityData.completed;
+					xtag.fireEvent(e.templateTarget, 'datapropertychanged', 
+							{ dataProperty: { key: 'completed', value: !completed }});
+					var elem = xtag.query(e.templateTarget, '.completed')[0];
+					xtag[(completed ? 'remove' : 'add') + 'Class'](elem, 'selected');
+					e.templateTarget.parentNode.removeChild(e.templateTarget);
+				},
+				'click:delegate(.starred)': function(e){
+					var starred = e.templateTarget.xtag.entityData.starred;
+					xtag.fireEvent(e.templateTarget, 'datapropertychanged', 
+							{ dataProperty: { key: 'starred', value: !starred }});
+					var elem = xtag.query(e.templateTarget, '.starred')[0];
+					xtag[(starred ? 'remove' : 'add') + 'Class'](elem, 'selected');						
+				}, 
+				'click:delegate(h3)': function(e){
+					var selected = document.createElement('x-todo-item');		
+					selected.dataset.pk = e.templateTarget.dataset.pk;
+					selected.xtag.entityData = e.templateTarget.xtag.entityData;
+					selected.template = 'todo-item-detail';
+
+					var currentDetail = document.getElementById('detail').children[0];
+					if (!currentDetail || currentDetail.pk != e.templateTarget.pk || currentDetail.template != selected.template){							
+						Layout.setDetail(selected);
 					}
-				});
+				}
+			});
+			this.beforeRender = function(obj){
+				var date = new Date(Date.parse(obj.date));					
+				obj.date = date.toLocaleTimeString() + " " + date.toLocaleDateString();
+				obj.starred = obj.starred ? 'selected' : '';
+				obj.completed = obj.completed ? 'selected' : '';
+				return obj;
+			}
 		</script>
 		<script type="template/content">
 			<h3>{title}</h3>
-			<ul>
-				<li>{date}</li>
-				<li>{starred}</li>
-				<li>{completed}</li>
-			</ul>
-			<ul>
-				<li><a href="#" class="edit">edit</a></li>
-				<li><a href="#" class="completed">completed</a></li>
-			</ul>
+			<div class="date">{date}</div>
+			<div class="todo-properties">
+				<span class="starred {starred}"><img src="images/914-star.png"/></span>
+				<span class="completed {completed}"><img src="images/1216-right.png"/></span>
+				<span class="edit"><img src="images/126-pencil.png"/></span>
+			</div>
 		</script>
 	</x-template>
 
 	<x-template name="todo-item-detail">
+		<script type="template/script">
+			this.beforeRender = function(obj){
+				var date = new Date(Date.parse(obj.date));					
+				obj.date = date.toLocaleTimeString() + " " + date.toLocaleDateString();
+				obj.starred = obj.starred ? 'selected' : '';
+				obj.completed = obj.completed ? 'selected' : '';
+				return obj;
+			}
+		</script>
 		<script type="template/content">
 			<h3>{title}</h3>
 			<p>{description}</p>
-			<ul><li>{date}</li><li>{starred}</li><li>{completed}</li></ul>
+			<div class="todo-properties">
+				<span class="date">{date}</span>
+				<span class="starred {starred}"><img src="images/914-star.png"/></span>
+				<span class="completed {completed}"><img src="images/1216-right.png"/></span>
+				<span class="edit"><img src="images/126-pencil.png"/></span>
+			</div>
 		</script>
 	</x-template>
 
 	<x-template name="todo-item-edit">
 		<script type="template/script">
-				this.addTemplateListeners({
-					'click:delegate(.save)': function(e){
-						var newTodo = { 
-							starred: false,
-							completed: false, 
-							date: new Date() 
-						};
-						//how to check if this is an updated, vs new
-						xtag.query(this.parentNode, 'input').forEach(function(input){
-							newTodo[input.name] = input.value;
-						});
-						for (var key in newTodo){
-							xtag.fireEvent(this.parentNode, 'datapropertychanged', 
-								{ dataProperty: { key: key, value: newTodo[key] }});
-						}
-						document.getElementsByTagName('x-todo-list')[0].refresh();
-						Layout.home();
+			this.addTemplateListeners({
+				'click:delegate(.save)': function(e){
+					var newTodo = { 
+						starred: false,
+						completed: false, 
+						date: new Date()
+					};
+					xtag.query(e.templateTarget, 'input').forEach(function(input){
+						newTodo[input.name] = input.value;
+					});
+					if (!e.templateTarget.dataset.pk){
+						xtag.fireEvent(e.templateTarget, 'dataentitycreated');
 					}
-				});
+					for (var key in newTodo){
+						xtag.fireEvent(e.templateTarget, 'datapropertychanged', 
+							{ dataProperty: { key: key, value: newTodo[key] }});
+					}
+					var item = document.createElement('x-todo-item');
+					item.template = 'todo-item-edit';
+					Layout.setDetail(item);
+					Layout.refreshList();
+					Layout.home();
+				}
+			});
 		</script>
 		<script type="template/content">
 			<p>
@@ -93,6 +130,15 @@
 				<input name="description" value="{description}" />
 			</p>
 			<button class="save">Save</button>
+		</script>
+	</x-template>
+
+	<x-template name="todo-settings">		
+		<script type="template/content">
+			<h2>Settings</h2>
+			<p>Email Updates: <input type="checkbox" checked /></p>
+			<p>Email:<input name="email"/></p>
+			<button>Ok</button>
 		</script>
 	</x-template>
 
@@ -117,7 +163,7 @@
 				<img src="images/logo.png"/>
 			</div>
 			<div id="wordmark" class="flex-line flex-center">
-				<span>Basic App</span>
+				<span>Responsive Todo</span>
 			</div>
 			<x-actionbar id="global_actions" data-mode="full">			
 				<x-action label="New Todo" data-action='new' icon="images/pencil.png"></x-action>
@@ -212,8 +258,7 @@
 
 </body>
 
-<script type="text/javascript" src="js/x-tag.js"></script>
-	<script type="text/javascript" src="js/list-view.js"></script>
+	<script type="text/javascript" src="js/x-tag.js"></script>
 	<script type="text/javascript" src="elements/actionbar/actionbar.js"></script>	
 	<script type="text/javascript" src="elements/flipbox/flipbox.js"></script>
 	<script type="text/javascript" src="elements/mediaquery/mediaquery.js"></script>
@@ -221,26 +266,21 @@
 	<script type="text/javascript" src="elements/shiftbox/shiftbox.js"></script>
 	<script type="text/javascript" src="elements/slidebox/slidebox.js"></script>
 	<script type="text/javascript" src="elements/template/template.js"></script>
-
+	<script type="text/javascript" src="js/list-view.js"></script>
 	<script type="text/javascript" src="js/todo.js"></script>
 
 <script type="text/javascript">
 
 (function(){
-	document.addEventListener('DOMComponentsLoaded', function(){
-
-	});
 
 	xtag.addEvent(xtag.query(document, '#global_menu')[0], 'command', function(e){
-		console.log("command", e.target.dataset.action);
 		var todoList = xtag.query(document, 'x-todo-list')[0];
-		
 		switch(e.target.dataset.action){
 			case 'active':
 				todoList.query = '{ "completed": false }';
 				break;
 			case 'starred':
-				todoList.query = '{ "starred": true }';
+				todoList.query = '{ "starred": true, "completed": false }';
 				break;
 			case 'completed':
 				todoList.query = '{ "completed": true }';
@@ -262,22 +302,6 @@
 		}
 	});
 
-	xtag.addEvent(xtag.query(document, "#list" )[0], 'click:delegate(x-todo-item)', function(e){
-		
-		if (~['A', 'LI'].indexOf(e.target.nodeName)) return;
-
-		var selected = document.createElement('x-todo-item');		
-		selected.dataset.pk = this.dataset.pk;
-		selected.xtag.entityData = this.xtag.entityData;
-		selected.template = 'todo-item-detail';
-
-		var currentDetail = document.getElementById('detail').children[0];
-		if (!currentDetail || currentDetail.pk != this.pk || currentDetail.template != selected.template){
-			history.pushState(null, null, "#" + this.dataset.pk);
-			Layout.setDetail(selected);
-		}
-		
-	});
 
 })();
 
