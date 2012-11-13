@@ -56,8 +56,6 @@ xtag.register('x-todo-settings', {
 		this.setAttribute('template', 'todo-settings');
 	}, 
 	onInsert: function(){
-		console.log("sdfsdf");
-
 	}
 });
 
